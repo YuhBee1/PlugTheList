@@ -1,0 +1,15 @@
+# One server block per host. Replace USER and the php-fpm socket. Repeat for auth, curator, app, admin, api with their root.
+server {
+    listen 443 ssl http2;
+    server_name plugthelist.com www.plugthelist.com;
+    root /home/USER/plugthelist/www;
+    index index.php;
+    location ~ /\. { deny all; }
+    location / { try_files $uri $uri/ @clean; }
+    location @clean { rewrite ^/([A-Za-z0-9_-]+)/?$ /$1.php last; }
+    location = /robots.txt { rewrite ^ /robots.php last; }
+    location = /sitemap.xml { rewrite ^ /sitemap.php last; }
+    location ~ \.php$ { include fastcgi_params; fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name; fastcgi_pass unix:/run/php/php8.3-fpm.sock; }
+}
+# auth also needs:  rewrite ^/register/curator/?$ /register-curator.php last;  rewrite ^/register/creative/?$ /register-creative.php last;
+# api also needs:   rewrite ^/webhook/?$ /paystack-webhook.php last;

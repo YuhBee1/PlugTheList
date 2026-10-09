@@ -1,0 +1,16 @@
+Options -Indexes -MultiViews
+DirectoryIndex index.php
+ServerSignature Off
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteRule (^|/)\. - [F]
+RewriteRule ^(.*/)?(composer|package)\.(json|lock)$ - [F]
+RewriteRule ^webhook/?$ paystack-webhook.php [L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{DOCUMENT_ROOT}/$1.php -f
+RewriteRule ^([A-Za-z0-9_-]+)/?$ $1.php [L,QSA]
+</IfModule>
+<IfModule mod_headers.c>
+Header always set X-Content-Type-Options "nosniff"
+</IfModule>
