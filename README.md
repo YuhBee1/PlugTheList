@@ -123,4 +123,8 @@ Please do not submit changes that bypass payment verification, authorization che
 
 ## License
 
-**No license has been specified yet.** Until the project owner adds a license file, the repository should not be treated as granting permission to use, modify, or redistribute the code. If you intend this to be open source, choose and add a license that reflects the owner's intent before inviting reuse or contributions.
+This project is licensed under the **MIT License**. See [`LICENSE`](LICENSE) for the full license text and copyright notice.
+
+The MIT License permits use, copying, modification, merging, publication, distribution, sublicensing, and sale of copies, provided the copyright and permission notice are included with substantial portions of the software. The software is provided **“as is,” without warranty or liability** as set out in the license text.
+
+The project license does not replace the licenses or notices of third-party dependencies or externally supplied materials; review those terms separately before redistribution.
