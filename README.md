@@ -97,19 +97,21 @@ The included suites currently exercise 78 engine checks and 82 HTTP checks, incl
 
 ## Deployment compatibility
 
-The repository includes a Vercel container configuration using FrankenPHP. `Dockerfile.vercel` installs the required PHP extensions, `Caddyfile` maps the existing PHP areas to one Vercel hostname, and `vercel.json` sends requests to the container service. Vercel's default static build does not run the PHP app; use this container setup for the marketplace.
+The repository has two distinct Vercel deployments. The existing `plugthelist` project uses `Dockerfile.vercel` and FrankenPHP; Caddy sends `/auth/`, `/curator/`, `/app/`, `/admin/`, and `/api/` to their PHP roots, while the repository-root `index.html` provides a database-independent test page. Keep this PHP project protected by Vercel SSO. The root test page contains no live listings, fee settings, or payment flow.
 
-For the Vercel project, set these environment variables in the Vercel dashboard (never commit them):
+The separate public design preview lives in `preview-static/`. Create or connect a Vercel project named `plugthelist-preview` from this same GitHub repository and set its **Root Directory** to `preview-static`. It contains only a static landing page and public assets; it does not package the PHP application, private routes, secrets, uploads, or database. Disable deployment protection only for this static-only preview project if public access and social preview crawlers are desired. Do not disable SSO for the PHP marketplace project. The preview uses `noindex` so it can be shared for review without being treated as the production search listing.
+
+For the PHP project, set these environment variables in Vercel (never commit them):
 
 - `APP_ROUTING_MODE=path`
-- `APP_BASE_URL=https://<your-public-vercel-hostname>` (use the actual project domain; do not include a path)
+- `APP_BASE_URL=https://plugthelist.vercel.app` (or the stable domain actually assigned to this project; do not include a path)
 - `URL_SCHEME=https`
 - `APP_KEY`, `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER`, `DB_PASS`
 - `PAYSTACK_SECRET`, `CRON_TOKEN`, and SMTP values (`MAIL_DRIVER=smtp`, `MAIL_HOST`, `MAIL_PORT`, `MAIL_USER`, `MAIL_PASS`, and sender settings)
 
-Use a durable, externally reachable MySQL service and run `php bin/migrate.php` against it before opening the app. Keep `COOKIE_DOMAIN` unset for Vercel's single-host routing; the app switches to a host-only cookie in path mode. Configure the Paystack webhook at `/api/webhook` and a scheduler to call `/api/cron` with either `X-Cron-Token: <CRON_TOKEN>` or `Authorization: Bearer <CRON_TOKEN>`.
+Use a durable, externally reachable MySQL service and run `php bin/migrate.php` against it before enabling marketplace workflows. Keep `COOKIE_DOMAIN` unset for Vercel's single-host routing; the app switches to a host-only cookie in path mode. Configure the Paystack webhook at `/api/webhook` and a scheduler to call `/api/cron` with either `X-Cron-Token: <CRON_TOKEN>` or `Authorization: Bearer <CRON_TOKEN>`.
 
-**The container is a deployment adapter, not a complete production provisioning step.** Vercel's container filesystem is ephemeral, while uploaded listing/proof/delivery images currently use local `storage/uploads`. Do not rely on those uploads persisting across container restarts or scaling. A durable object-storage adapter and credentials are required before using uploads in production. Database access, SMTP, Paystack, and cron secrets also need to be configured and tested in the Vercel project. No live credentials or external database are included in this repository.
+**The container is a deployment adapter, not a complete production provisioning step.** Vercel's container filesystem is ephemeral, while uploaded listing/proof/delivery images currently use local `storage/uploads`. Do not rely on those uploads persisting across container restarts or scaling. A durable object-storage adapter and credentials are required before using uploads in production. Database access, SMTP, Paystack, and cron secrets also need to be configured and tested in the PHP project. No live credentials or external database are included in this repository.
 
 ## Security and responsible operation
 

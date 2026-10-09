@@ -1,6 +1,8 @@
 /secrets/.env
 /storage/logs/*
 !/storage/logs/.gitkeep
+/plan.md
+/TODO.md
 /storage/uploads/*
 !/storage/uploads/.gitkeep
 /storage/ratelimit/*

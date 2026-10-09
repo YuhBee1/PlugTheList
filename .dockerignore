@@ -4,6 +4,11 @@
 .env.*
 secrets/
 storage/
+brand/
+preview-static/
+plan.md
+TODO.md
+.vercel/
 tests/
 docs/
 node_modules/

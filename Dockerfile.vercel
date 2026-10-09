@@ -3,6 +3,7 @@ FROM dunglas/frankenphp:1-php8.4-bookworm
 RUN install-php-extensions pdo_mysql gd curl mbstring sodium
 
 WORKDIR /app
+COPY index.html ./index.html
 COPY shared ./shared
 COPY database ./database
 COPY bin ./bin

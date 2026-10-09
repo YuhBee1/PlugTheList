@@ -86,8 +86,20 @@ function page_header(array $o = []): void
         echo '<link rel="canonical" href="' . e((string)$o['canonical']) . '">' . "\n";
     }
     echo '<meta name="color-scheme" content="light dark">' . "\n";
-    echo '<meta property="og:title" content="' . e($full) . '"><meta property="og:description" content="' . e($desc) . '"><meta property="og:type" content="website">' . "\n";
+    echo '<meta name="theme-color" content="#12130F">' . "\n";
+    if ($area === 'public') {
+        $shareImage = url('www', '/assets/og-image.png');
+        echo '<meta property="og:site_name" content="PlugTheList"><meta property="og:title" content="' . e($full) . '"><meta property="og:description" content="' . e($desc) . '"><meta property="og:type" content="website"><meta property="og:locale" content="en_NG">' . "\n";
+        if (!empty($o['canonical'])) {
+            echo '<meta property="og:url" content="' . e((string)$o['canonical']) . '">' . "\n";
+        }
+        echo '<meta property="og:image" content="' . e($shareImage) . '"><meta property="og:image:secure_url" content="' . e($shareImage) . '"><meta property="og:image:type" content="image/png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="1200"><meta property="og:image:alt" content="PlugTheList logo">' . "\n";
+        echo '<meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="' . e($full) . '"><meta name="twitter:description" content="' . e($desc) . '"><meta name="twitter:image" content="' . e($shareImage) . '"><meta name="twitter:image:alt" content="PlugTheList logo">' . "\n";
+    }
     echo '<link rel="icon" href="' . e(asset('favicon.svg')) . '" type="image/svg+xml">' . "\n";
+    echo '<link rel="icon" href="' . e(asset('icon-192.png')) . '" type="image/png" sizes="192x192">' . "\n";
+    echo '<link rel="apple-touch-icon" href="' . e(asset('apple-touch-icon.png')) . '">' . "\n";
+    echo '<link rel="manifest" href="' . e(asset('site.webmanifest')) . '">' . "\n";
     echo '<script src="' . e(asset('theme.js')) . '"></script>' . "\n";
     echo '<link rel="stylesheet" href="' . e(asset('ptl.css')) . '">' . "\n";
     echo '<script src="' . e(asset('ptl.js')) . '" defer></script>' . "\n";
@@ -95,7 +107,7 @@ function page_header(array $o = []): void
     echo '<a class="skip" href="#main">Skip to content</a>' . "\n";
     echo '<div class="stripe" aria-hidden="true"></div>' . "\n";
     echo '<header class="top"><div class="wrap bar">';
-    echo '<a class="brand" href="' . e($u ? role_home((string)$u['role']) : url('www', '/')) . '"><span class="mark" aria-hidden="true">P</span><span class="brand-t">PlugTheList</span></a>';
+    echo '<a class="brand" href="' . e($u ? role_home((string)$u['role']) : url('www', '/')) . '"><img class="mark" src="' . e(asset('logo-mark.svg')) . '" alt="" width="34" height="34"><span class="brand-t">PlugTheList</span></a>';
     echo '<button class="navbtn" type="button" aria-expanded="false" aria-controls="nav" data-nav-toggle>Menu</button>';
     echo '<nav id="nav" class="nav" aria-label="Main">';
     foreach (nav_items($area, $u) as [$href, $label]) {
@@ -138,7 +150,7 @@ function Security_noStoreIfPrivate(string $area): void
 function page_footer(): void
 {
     echo "\n</div>\n<footer class=\"foot\"><div class=\"wrap foot-grid\">";
-    echo '<div><strong>PlugTheList</strong><p class="muted">Curators set the price. Creatives book with confidence. Escrow holds the money until the work is done.</p><p class="muted small">Operated by Paramount Digital Services, Uyo, Akwa Ibom, Nigeria.</p></div>';
+    echo '<div><a class="foot-brand" href="' . e(url('www', '/')) . '" aria-label="PlugTheList home"><img class="foot-logo" src="' . e(asset('logo-horizontal-dark.svg')) . '" alt="PlugTheList" width="875" height="236"></a><p class="muted">Curators set the price. Creatives book with confidence. Escrow holds the money until the work is done.</p><p class="muted small">Operated by Paramount Digital Services, Uyo, Akwa Ibom, Nigeria.</p></div>';
     echo '<div><strong>Platform</strong><ul>'
         . '<li><a href="' . e(url('www', '/browse')) . '">Browse curators</a></li>'
         . '<li><a href="' . e(url('www', '/how-it-works')) . '">How escrow works</a></li>'

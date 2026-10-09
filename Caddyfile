@@ -1,61 +1,77 @@
 :{$PORT:80} {
-	route {
-		@hidden path_regexp hidden ^/(.*/)?\.
-		respond @hidden 404
-		@private path /secrets* /storage* /database* /shared* /bin* /tests* /docs* /composer.* /Dockerfile.vercel /Caddyfile
-		respond @private 404
+  route {
+    @hidden path_regexp hidden ^/(.*/)?\.
+    respond @hidden 404
+    @private path /secrets* /storage* /database* /shared* /bin* /tests* /docs* /composer.* /Dockerfile.vercel /Caddyfile /vercel.json /brand* /preview-static* /plan.md /TODO.md /annotations.md /README.md /LICENSE*
+    respond @private 404
 
-		@curatorRegister path /auth/register/curator /auth/register/curator/
-		rewrite @curatorRegister /auth/register-curator.php
-		@creativeRegister path /auth/register/creative /auth/register/creative/
-		rewrite @creativeRegister /auth/register-creative.php
-		@apiWebhook path /api/webhook /api/webhook/
-		rewrite @apiWebhook /api/paystack-webhook.php
-		@robots path /robots.txt
-		rewrite @robots /robots.php
-		@sitemap path /sitemap.xml
-		rewrite @sitemap /sitemap.php
+    @root path / /index.html
+    handle @root {
+      root * /app
+      header {
+        X-Content-Type-Options nosniff
+        Referrer-Policy strict-origin-when-cross-origin
+        X-Frame-Options DENY
+        Content-Security-Policy "default-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; object-src 'none'"
+      }
+      try_files /index.html
+      file_server
+    }
 
-		@publicAssets path /assets/* /favicon.svg
-		handle @publicAssets {
-			root * /app/www
-			file_server
-		}
+    @rootFavicon path /favicon.svg /favicon.ico
+    rewrite @rootFavicon /assets/favicon.svg
 
-		handle_path /auth/* {
-			root * /app/auth
-			try_files {path} {path}.php {path}/index.php index.php
-			php_server
-		}
+    @curatorRegister path /auth/register/curator /auth/register/curator/
+    rewrite @curatorRegister /auth/register-curator.php
+    @creativeRegister path /auth/register/creative /auth/register/creative/
+    rewrite @creativeRegister /auth/register-creative.php
+    @apiWebhook path /api/webhook /api/webhook/
+    rewrite @apiWebhook /api/paystack-webhook.php
+    @robots path /robots.txt
+    rewrite @robots /robots.php
+    @sitemap path /sitemap.xml
+    rewrite @sitemap /sitemap.php
 
-		handle_path /curator/* {
-			root * /app/curator
-			try_files {path} {path}.php {path}/index.php index.php
-			php_server
-		}
+    @publicAssets path /assets/*
+    handle @publicAssets {
+      root * /app/www
+      file_server
+    }
 
-		handle_path /app/* {
-			root * /app/app
-			try_files {path} {path}.php {path}/index.php index.php
-			php_server
-		}
+    handle_path /auth/* {
+      root * /app/auth
+      try_files {path} {path}.php {path}/index.php index.php
+      php_server
+    }
 
-		handle_path /admin/* {
-			root * /app/admin
-			try_files {path} {path}.php {path}/index.php index.php
-			php_server
-		}
+    handle_path /curator/* {
+      root * /app/curator
+      try_files {path} {path}.php {path}/index.php index.php
+      php_server
+    }
 
-		handle_path /api/* {
-			root * /app/api
-			try_files {path} {path}.php {path}/index.php index.php
-			php_server
-		}
+    handle_path /app/* {
+      root * /app/app
+      try_files {path} {path}.php {path}/index.php index.php
+      php_server
+    }
 
-		handle {
-			root * /app/www
-			try_files {path} {path}.php {path}/index.php index.php
-			php_server
-		}
-	}
+    handle_path /admin/* {
+      root * /app/admin
+      try_files {path} {path}.php {path}/index.php index.php
+      php_server
+    }
+
+    handle_path /api/* {
+      root * /app/api
+      try_files {path} {path}.php {path}/index.php index.php
+      php_server
+    }
+
+    handle {
+      root * /app/www
+      try_files {path} {path}.php {path}/index.php index.php
+      php_server
+    }
+  }
 }
