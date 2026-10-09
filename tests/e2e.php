@@ -176,6 +176,7 @@ $bad = str_replace('2625000', '100', $body);
 curl_setopt($ch, CURLOPT_POSTFIELDS, $bad); curl_exec($ch);
 t('tampered body rejected', curl_getinfo($ch, CURLINFO_HTTP_CODE) === 401);
 t('cron with token runs', (function () use ($API) { $ch = curl_init($API . '/cron'); curl_setopt_array($ch, [CURLOPT_RETURNTRANSFER => true, CURLOPT_HTTPHEADER => ['X-Cron-Token: cron_token_for_tests_1234567890']]); $r = curl_exec($ch); return curl_getinfo($ch, CURLINFO_HTTP_CODE) === 200 && str_contains((string)$r, '"ok":true'); })());
+t('cron bearer token runs', (function () use ($API) { $ch = curl_init($API . '/cron'); curl_setopt_array($ch, [CURLOPT_RETURNTRANSFER => true, CURLOPT_HTTPHEADER => ['Authorization: Bearer cron_token_for_tests_1234567890']]); $r = curl_exec($ch); return curl_getinfo($ch, CURLINFO_HTTP_CODE) === 200 && str_contains((string)$r, '"ok":true'); })());
 
 echo "Privacy, sign out\n";
 $r = $cre->post($P . '/account', $P . '/account', ['action' => 'export']);

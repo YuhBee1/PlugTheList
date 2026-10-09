@@ -31,6 +31,27 @@ function url_scheme(): string
                                                                               
 function url(string $sub, string $path = '/'): string
 {
+    if (env('APP_ROUTING_MODE') === 'path') {
+        $base = trim((string)env('APP_BASE_URL', ''));
+        if ($base === '') {
+            $deploymentHost = trim((string)env('VERCEL_URL', ''));
+            if ($deploymentHost === '') {
+                $deploymentHost = trim((string)($_SERVER['HTTP_HOST'] ?? ''));
+            }
+            if ($deploymentHost !== '' && preg_match('/^[A-Za-z0-9.-]+(?::[0-9]{1,5})?$/', $deploymentHost)) {
+                $base = 'https://' . $deploymentHost;
+            } else {
+                $base = url_scheme() . '://' . base_domain();
+            }
+        }
+        $parsed = parse_url($base);
+        if ($parsed === false || !in_array(strtolower((string)($parsed['scheme'] ?? '')), ['http', 'https'], true) || empty($parsed['host']) || isset($parsed['user']) || isset($parsed['pass'])) {
+            throw new \RuntimeException('APP_BASE_URL must be a valid HTTP(S) origin.');
+        }
+        $origin = $parsed['scheme'] . '://' . $parsed['host'] . (isset($parsed['port']) ? ':' . $parsed['port'] : '');
+        $prefix = $sub === 'www' ? '' : '/' . rawurlencode($sub);
+        return rtrim($origin, '/') . $prefix . $path;
+    }
     $override = env('URL_' . strtoupper($sub));                                                 
     if ($override) {
         return rtrim($override, '/') . $path;

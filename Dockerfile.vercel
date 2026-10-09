@@ -1,0 +1,25 @@
+FROM dunglas/frankenphp:1-php8.4-bookworm
+
+RUN install-php-extensions pdo_mysql gd curl mbstring sodium
+
+WORKDIR /app
+COPY shared ./shared
+COPY database ./database
+COPY bin ./bin
+COPY www ./www
+COPY auth ./auth
+COPY curator ./curator
+COPY app ./app
+COPY admin ./admin
+COPY api ./api
+COPY Caddyfile /etc/caddy/Caddyfile
+
+RUN mkdir -p /app/storage/logs /app/storage/uploads /app/storage/ratelimit \
+    && chown -R www-data:www-data /app/storage
+
+ENV PORT=80
+ENV APP_ENV=production
+ENV APP_ROUTING_MODE=path
+ENV URL_SCHEME=https
+
+CMD ["frankenphp", "run", "--config", "/etc/caddy/Caddyfile"]

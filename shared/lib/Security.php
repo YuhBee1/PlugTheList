@@ -27,7 +27,7 @@ final class Security
 
     public static function setCookie(string $name, string $value, int $expires = 0, bool $shared = true): void
     {
-        $domain = $shared ? (Env::get('COOKIE_DOMAIN') ?? '') : '';
+        $domain = $shared && Env::get('APP_ROUTING_MODE') !== 'path' ? (Env::get('COOKIE_DOMAIN') ?? '') : '';
         $full = self::cookieName($name);
         if (!headers_sent()) {
             setcookie($full, $value, [
@@ -51,10 +51,11 @@ final class Security
     public static function deleteCookie(string $name, bool $shared = true): void
     {
         $full = self::cookieName($name);
+        $domain = $shared && Env::get('APP_ROUTING_MODE') !== 'path' ? (Env::get('COOKIE_DOMAIN') ?? '') : '';
         setcookie($full, '', [
             'expires' => time() - 3600,
             'path' => '/',
-            'domain' => $shared ? (Env::get('COOKIE_DOMAIN') ?? '') : '',
+            'domain' => $domain,
             'secure' => self::secure(),
             'httponly' => true,
             'samesite' => 'Lax',

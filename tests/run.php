@@ -55,6 +55,13 @@ t('parseNaira', Money::parseNaira('₦10,000') === 1000000 && Money::parseNaira(
 t('state machine', OrderState::can('paid', 'in_progress') && !OrderState::can('completed', 'refunded') && !OrderState::can('delivered', 'refunded'));
 t('phone', Validator::phone('0803 123 4567') === '+2348031234567' && Validator::phone('12345') === null);
 t('url https only', Validator::url('http://x.com/a') === null && Validator::url('https://open.spotify.com/playlist/abc') !== null && Validator::url('https://127.0.0.1/x') === null);
+PTL\Env::set('APP_ROUTING_MODE', 'path');
+PTL\Env::set('APP_BASE_URL', 'https://plugthelist.vercel.app');
+t('Vercel public path URL', url('www', '/browse') === 'https://plugthelist.vercel.app/browse');
+t('Vercel auth area path URL', url('auth', '/login') === 'https://plugthelist.vercel.app/auth/login');
+t('Vercel area URLs share one origin', count(all_origins()) === 1);
+PTL\Env::set('APP_ROUTING_MODE', '');
+PTL\Env::set('APP_BASE_URL', '');
 t('password rules', Validator::passwordProblems('short1') !== [] && Validator::passwordProblems('Correct-Horse-42') === []);
 t('seal/open', Crypto::open(Crypto::seal('hello', 'x'), 'x') === 'hello' && Crypto::open(Crypto::seal('hello', 'x'), 'y') === null);
 echo "Schema\n";

@@ -1,0 +1,10 @@
+.git
+.git/**
+.env
+.env.*
+secrets/
+storage/
+tests/
+docs/
+node_modules/
+vendor/

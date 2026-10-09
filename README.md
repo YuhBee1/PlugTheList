@@ -18,7 +18,7 @@ The project is implemented in plain **PHP 8.1+** and **MySQL**. It has no applic
 
 ## Architecture
 
-This application expects one shared private application directory and six separately configured web roots/hostnames. Each host points at its matching directory; shared code, configuration, database tools, and storage remain outside the public web roots.
+The default hosting layout uses one shared private application directory and six separately configured web roots/hostnames. For Vercel, the included FrankenPHP container instead routes the same areas through one hostname using path prefixes such as `/auth/`, `/curator/`, `/app/`, `/admin/`, and `/api/`.
 
 ```text
 plugthelist/
@@ -93,11 +93,23 @@ php tests/run.php
 bash tests/e2e.sh
 ```
 
-The included suites currently exercise 75 engine checks and 81 HTTP checks, including escrow/ledger invariants, authentication, access control, CSRF, listings, payment callbacks/webhooks, withdrawals, privacy, and public-page headers. The end-to-end suite uses an isolated local test setup and mock payment behavior; it does not validate live Paystack, SMTP, DNS, or production-host settings.
+The included suites currently exercise 78 engine checks and 82 HTTP checks, including escrow/ledger invariants, authentication, access control, CSRF, listings, payment callbacks/webhooks, withdrawals, privacy, Vercel path URLs, and bearer-token cron authentication. The end-to-end suite uses an isolated local test setup and mock payment behavior; it does not validate live Paystack, SMTP, DNS, or production-host settings.
 
 ## Deployment compatibility
 
-The intended deployment model is a PHP-enabled web host with MySQL, not a static hosting platform. A Vercel project was created for this repository, but Vercel's default build did not detect or execute the PHP application; the resulting deployment is not a functional instance of PlugTheList. Use the documented PHP deployment configuration unless a supported PHP runtime/adapter and all required services are deliberately added and tested.
+The repository includes a Vercel container configuration using FrankenPHP. `Dockerfile.vercel` installs the required PHP extensions, `Caddyfile` maps the existing PHP areas to one Vercel hostname, and `vercel.json` sends requests to the container service. Vercel's default static build does not run the PHP app; use this container setup for the marketplace.
+
+For the Vercel project, set these environment variables in the Vercel dashboard (never commit them):
+
+- `APP_ROUTING_MODE=path`
+- `APP_BASE_URL=https://<your-public-vercel-hostname>` (use the actual project domain; do not include a path)
+- `URL_SCHEME=https`
+- `APP_KEY`, `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER`, `DB_PASS`
+- `PAYSTACK_SECRET`, `CRON_TOKEN`, and SMTP values (`MAIL_DRIVER=smtp`, `MAIL_HOST`, `MAIL_PORT`, `MAIL_USER`, `MAIL_PASS`, and sender settings)
+
+Use a durable, externally reachable MySQL service and run `php bin/migrate.php` against it before opening the app. Keep `COOKIE_DOMAIN` unset for Vercel's single-host routing; the app switches to a host-only cookie in path mode. Configure the Paystack webhook at `/api/webhook` and a scheduler to call `/api/cron` with either `X-Cron-Token: <CRON_TOKEN>` or `Authorization: Bearer <CRON_TOKEN>`.
+
+**The container is a deployment adapter, not a complete production provisioning step.** Vercel's container filesystem is ephemeral, while uploaded listing/proof/delivery images currently use local `storage/uploads`. Do not rely on those uploads persisting across container restarts or scaling. A durable object-storage adapter and credentials are required before using uploads in production. Database access, SMTP, Paystack, and cron secrets also need to be configured and tested in the Vercel project. No live credentials or external database are included in this repository.
 
 ## Security and responsible operation
 
