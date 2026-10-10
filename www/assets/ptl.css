@@ -39,7 +39,15 @@ main { padding-block: 28px 56px; }
 .stripe { height: 10px; background: repeating-linear-gradient(90deg, var(--yellow) 0 28px, #12130F 28px 56px); }
 .top { background: var(--surface); border-bottom: 2px solid var(--ink); }
 .bar { display: flex; align-items: center; gap: 18px; min-height: 62px; flex-wrap: wrap; }
-.brand { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; font-weight: 900; font-size: 1.2rem; letter-spacing: -.03em; }
+.brand { display: inline-flex; align-items: center; gap: 0; flex: 0 0 auto; min-width: 0; text-decoration: none; }
+.brand-logo { display: block; width: clamp(140px, 16vw, 184px); height: auto; }
+.brand-logo-dark { display: none; }
+:root[data-theme="dark"] .brand-logo-light { display: none; }
+:root[data-theme="dark"] .brand-logo-dark { display: block; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .brand-logo-light { display: none; }
+  :root:not([data-theme="light"]) .brand-logo-dark { display: block; }
+}
 .mark { display: grid; place-items: center; width: 32px; height: 32px; background: var(--yellow); color: var(--yellow-ink); border: 2px solid #12130F; border-radius: 6px; font-weight: 900; }
 .nav { display: flex; gap: 4px; flex: 1; flex-wrap: wrap; }
 .nav a { text-decoration: none; padding: 8px 12px; border-radius: var(--r); font-weight: 600; }
@@ -75,6 +83,15 @@ button.link, a.link { background: none; border: 0; padding: 0; font: inherit; co
 :root[data-theme="dark"] .board { box-shadow: 6px 6px 0 var(--yellow); border-color: var(--yellow); }
 .board-head { display: flex; justify-content: space-between; padding: 10px 16px; background: #12130F; color: var(--yellow); font-weight: 800; }
 .board-head a { color: #fff; }
+.preview-board .board-head { align-items: center; }
+.board-badge { border: 1px solid var(--yellow); border-radius: 999px; padding: 2px 8px; font-size: .72rem; letter-spacing: .08em; }
+.preview-steps { list-style: none; margin: 0; padding: 0 16px; }
+.preview-step { display: grid; grid-template-columns: 34px minmax(0, 1fr); gap: 12px; align-items: start; padding: 14px 0; border-bottom: 1px solid var(--line); }
+.preview-step:last-child { border-bottom: 0; }
+.preview-number { display: grid; place-items: center; width: 32px; height: 32px; border: 2px solid var(--ink); border-radius: 50%; background: var(--yellow); color: var(--yellow-ink); font-size: .78rem; font-weight: 900; }
+.preview-copy strong, .preview-copy span { display: block; }
+.preview-copy span { color: var(--muted); font-size: .9rem; }
+.preview-note { margin: 0; padding: 12px 16px; border-top: 1px dashed var(--line); background: var(--bg); color: var(--muted); font-size: .85rem; }
 .rows { list-style: none; margin: 0; padding: 0; }
 .row { border-top: 1px solid var(--line); }
 .row:first-child { border-top: 0; }
@@ -97,7 +114,14 @@ button.link, a.link { background: none; border: 0; padding: 0; font: inherit; co
 .flow li span { color: var(--muted); font-size: .95rem; }
 .flow.tall { grid-template-columns: 1fr; }
 .split { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; padding-block: 24px; }
-.honest { border-top: 2px solid var(--ink); padding-block: 24px 40px; max-width: 760px; }
+.audience-grid { gap: 24px; }
+.audience-card { display: flex; flex-direction: column; align-items: flex-start; padding: 24px; background: var(--surface); border: 2px solid var(--ink); border-top: 6px solid var(--yellow); border-radius: 8px; box-shadow: 4px 4px 0 var(--ink); }
+.audience-eyebrow { margin: 0 0 12px; color: var(--muted); font-size: .74rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+.audience-grid .audience-card h2 { margin: 0 0 12px; }
+.audience-card > p:last-child { margin-top: auto; padding-top: 8px; margin-bottom: 0; }
+.honest { border-left: 6px solid var(--yellow); padding: 20px 24px; max-width: 760px; background: var(--surface); border-radius: 0 8px 8px 0; box-shadow: 4px 4px 0 var(--ink); margin-block: 24px; }
+.honest h2 { margin: 0 0 12px; }
+.honest p { margin: 0; }
 
 .foot { background: #12130F; color: #D9DBD0; padding-block: 36px 24px; margin-top: 40px; border-top: 10px solid var(--yellow); }
 .foot a { color: #fff; } .foot .muted { color: #9DA095; }

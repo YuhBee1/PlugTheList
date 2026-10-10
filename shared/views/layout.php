@@ -107,7 +107,7 @@ function page_header(array $o = []): void
     echo '<a class="skip" href="#main">Skip to content</a>' . "\n";
     echo '<div class="stripe" aria-hidden="true"></div>' . "\n";
     echo '<header class="top"><div class="wrap bar">';
-    echo '<a class="brand" href="' . e($u ? role_home((string)$u['role']) : url('www', '/')) . '"><img class="mark" src="' . e(asset('logo-mark.svg')) . '" alt="" width="34" height="34"><span class="brand-t">PlugTheList</span></a>';
+    echo '<a class="brand" href="' . e($u ? role_home((string)$u['role']) : url('www', '/')) . '" aria-label="PlugTheList home"><img class="brand-logo brand-logo-light" src="' . e(asset('logo-horizontal.svg')) . '" alt="" width="875" height="236"><img class="brand-logo brand-logo-dark" src="' . e(asset('logo-horizontal-dark.svg')) . '" alt="" width="875" height="236"></a>';
     echo '<button class="navbtn" type="button" aria-expanded="false" aria-controls="nav" data-nav-toggle>Menu</button>';
     echo '<nav id="nav" class="nav" aria-label="Main">';
     foreach (nav_items($area, $u) as [$href, $label]) {

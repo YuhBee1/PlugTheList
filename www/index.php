@@ -41,13 +41,15 @@ page_header(['title' => 'PlugTheList', 'area' => 'public', 'canonical' => url('w
   </ol>
 </section>
 
-<section class="wrap split">
-  <div>
+<section class="wrap split audience-grid">
+  <div class="audience-card">
+    <p class="audience-eyebrow">For campaign owners</p>
     <h2>For artists, labels and businesses</h2>
     <p>See the price before you talk to anyone. Every listing shows the audience, genres, turnaround and what the curator will and will not do.</p>
     <p><a class="btn" href="<?= e(url('auth', '/register/creative')) ?>">Create a creative account</a></p>
   </div>
-  <div>
+  <div class="audience-card">
+    <p class="audience-eyebrow">For curators</p>
     <h2>For playlist and community owners</h2>
     <p>Turn your audience into income without chasing payments. You choose your prices and which bookings to accept. We keep <?= e(rtrim(rtrim(number_format($cur, 2), '0'), '.')) ?>% of each job; buyers pay a <?= e(rtrim(rtrim(number_format($buyer, 2), '0'), '.')) ?>% service fee on top.</p>
     <p><a class="btn" href="<?= e(url('auth', '/register/curator')) ?>">Create a curator account</a></p>

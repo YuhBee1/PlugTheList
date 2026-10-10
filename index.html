@@ -37,7 +37,7 @@
   <div class="stripe" aria-hidden="true"></div>
   <header class="top">
     <div class="wrap bar">
-      <a class="brand" href="/" aria-label="PlugTheList home"><img class="mark" src="/assets/logo-mark.svg" alt="" width="34" height="34"><span class="brand-t">PlugTheList</span></a>
+      <a class="brand" href="/" aria-label="PlugTheList home"><img class="brand-logo brand-logo-light" src="/assets/logo-horizontal.svg" alt="" width="875" height="236"><img class="brand-logo brand-logo-dark" src="/assets/logo-horizontal-dark.svg" alt="" width="875" height="236"></a>
       <button class="navbtn" type="button" aria-expanded="false" aria-controls="nav" data-nav-toggle>Menu</button>
       <nav id="nav" class="nav" aria-label="Main">
         <a href="/browse">Browse</a>
@@ -64,9 +64,14 @@
           </p>
           <p class="muted small">Prices in naira. This database-independent preview does not process payments.</p>
         </div>
-        <aside class="board" aria-label="Curators you can book now">
-          <div class="board-head"><span>Open for bookings</span><a href="/browse">See all</a></div>
-          <p class="empty">No live listings are connected to this test page. Connect the marketplace database to display curators.</p>
+        <aside class="board preview-board" aria-label="Booking protection preview">
+          <div class="board-head"><span>Booking protection</span><span class="board-badge">ESCROW</span></div>
+          <ol class="preview-steps">
+            <li class="preview-step"><span class="preview-number" aria-hidden="true">01</span><span class="preview-copy"><strong>Payment held</strong><span>Your payment stays in escrow, not with the curator.</span></span></li>
+            <li class="preview-step"><span class="preview-number" aria-hidden="true">02</span><span class="preview-copy"><strong>Work delivered</strong><span>The curator uploads proof within the promised time.</span></span></li>
+            <li class="preview-step"><span class="preview-number" aria-hidden="true">03</span><span class="preview-copy"><strong>Approve or review</strong><span>Approve it, open a dispute, or receive an automatic refund if there is no delivery.</span></span></li>
+          </ol>
+          <p class="preview-note"><strong>Test page only.</strong> Live listings and payment processing are not connected here.</p>
         </aside>
       </div>
     </section>
@@ -79,13 +84,15 @@
         <li><strong>You approve, they get paid</strong><span>Approve it, or let the review window pass. Problem? Open a dispute and we review it. No delivery means an automatic refund.</span></li>
       </ol>
     </section>
-    <section class="wrap split">
-      <div>
+    <section class="wrap split audience-grid">
+      <div class="audience-card">
+        <p class="audience-eyebrow">For campaign owners</p>
         <h2>For artists, labels and businesses</h2>
         <p>See the price before you talk to anyone. Every listing shows the audience, genres, turnaround and what the curator will and will not do.</p>
         <p><a class="btn" href="/auth/register/creative">Create a creative account</a></p>
       </div>
-      <div>
+      <div class="audience-card">
+        <p class="audience-eyebrow">For curators</p>
         <h2>For playlist and community owners</h2>
         <p>Turn your audience into income without chasing payments. You choose your prices and which bookings to accept. Live platform and service-fee settings are not connected to this database-independent preview.</p>
         <p><a class="btn" href="/auth/register/curator">Create a curator account</a></p>
